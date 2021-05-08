@@ -1,28 +1,18 @@
 const dataHelper = require("./helpers/data.helper");
 
-const configHelper = require("./helpers/config.helper");
-
-const express = require("express");
-const app = express();
-const port = 3000;
-
 (async () => {
-  console.log("config", configHelper);
   try {
     await dataHelper.checkAvalability();
+    console.log("Initial call happened");
     setInterval(async () => {
       await dataHelper.checkAvalability();
+      console.log("Called Api");
     }, 900000);
+
+    setInterval(async () => {
+      console.log("Vaccine checker running...");
+    }, 5000);
   } catch (ex) {
     console.log("error", ex);
   }
-  //await dataHelper.checkAvalability();
 })();
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});

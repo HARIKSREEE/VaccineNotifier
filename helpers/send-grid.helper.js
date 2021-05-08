@@ -2,10 +2,7 @@ const sgMail = require("@sendgrid/mail");
 
 const configHelper = require("./config.helper");
 
-
-
 (() => {
-  console.log("api key", configHelper.sendGridKey);
   sgMail.setApiKey(configHelper.sendGridKey);
 })();
 
@@ -35,9 +32,7 @@ const SendGrid = {
     updatedMessage.to = process.env.EMAIL_TO;
     return updatedMessage;
   },
-  setKey: () => {
-   
-  },
+  setKey: () => {},
 };
 
 module.exports = SendGrid;
