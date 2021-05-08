@@ -83,8 +83,8 @@ const sampleResponse = {
 const config = {
   headers: {
     accept: "application/json",
-    host: "cdn-api.co-vin.in",
-    "User-Agent": "PostmanRuntime/7.28.0",
+    host: "",
+    "User-Agent": "",
     "Access-Control-Allow-Origin": "*",
   },
 };
@@ -98,8 +98,13 @@ const DataHelper = {
     id = process.env.STATE_ID,
     date = process.env.DATE_CONFIG
   ) => {
+    id == id ?? configHelper.stateId;
+    date = date ?? configHelper.date;
     const url = getDistrictUrl(id, date);
-    return await axiosHelper.get(url, config);
+    const updatedConfig = config;
+    config.headers.host = configHelper.endpointHost;
+    config.headers["User-Agent"] = configHelper.runtime;
+    return await axiosHelper.get(url, updatedConfig);
   },
   findAvailableCenters: (data) => {
     if (!data.data) {
@@ -107,7 +112,7 @@ const DataHelper = {
       return;
     }
     const availableCenters = [];
-    const centerData =  data.data?.centers || [];
+    const centerData = data.data?.centers || [];
     const centerCount = centerData?.length;
     for (let i = 0; i < centerCount; i++) {
       const currentCenter = centerData[i];
