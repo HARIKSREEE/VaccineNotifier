@@ -1,0 +1,17 @@
+{
+  "name": "find-your-vaccin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Harikrishnan S R",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.4.4",
+    "axios": "^0.21.1",
+    "dotenv": "^9.0.0",
+    "express": "^4.17.1"
+  }
+}
