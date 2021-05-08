@@ -1,16 +1,9 @@
-const axiosHelper = require("./helpers/axio.helper");
-const express = require("express");
-
-const dotenv = require("dotenv");
-
 const dataHelper = require("./helpers/data.helper");
 
-const mailHelper = require("./helpers/send-grid.helper");
+const configHelper = require("./helpers/config.helper");
 
 (async () => {
-  const result = dotenv.config();
-
-  console.log(process.env.SEND_GRID_API_KEY);
+  console.log("config", configHelper);
   await dataHelper.checkAvalability();
   setInterval(async () => {
     await dataHelper.checkAvalability();
