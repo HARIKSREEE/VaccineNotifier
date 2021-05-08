@@ -41,6 +41,42 @@ const sampleResponse = {
         },
       ],
     },
+    {
+      district_name: "Thiruvananthapuram", //district name
+      block_name: "", //block name
+      address: "MCh", //place name
+      from: "9:00Am", //time,
+      to: "06:00PM", //time
+      name: "SCT", //center name
+      pincode: "695027",
+      sessions: [
+        {
+          available_capacity: 0,
+          date: "08-05-2021", // date,
+          min_age_limit: 18,
+          vaccine: "Covishield", //covishield/ covaxin
+          slots: ["09:00AM-11:00AM", "09:00AM-11:00AM"],
+        },
+      ],
+    },
+    {
+      district_name: "Thiruvananthapuram", //district name
+      block_name: "", //block name
+      address: "MCh", //place name
+      from: "9:00Am", //time,
+      to: "06:00PM", //time
+      name: "SCT", //center name
+      pincode: "695027",
+      sessions: [
+        {
+          available_capacity: 8,
+          date: "08-05-2021", // date,
+          min_age_limit: 18,
+          vaccine: "Covishield", //covishield/ covaxin
+          slots: ["09:00AM-11:00AM", "09:00AM-11:00AM"],
+        },
+      ],
+    },
   ],
 };
 
@@ -79,7 +115,7 @@ const DataHelper = {
       const hasAvailability = centerSessions.some(
         (session) =>
           session.available_capacity > 0 &&
-          `${session.min_age_limit}` === process.env.MIN_AGE
+          +session.min_age_limit >= process.env.MIN_AGE
       );
       if (hasAvailability) {
         availableCenters.push(centerData[i]);
@@ -139,6 +175,7 @@ const DataHelper = {
       data += `<li><span>Slots</span>&nbsp;<span>${(
         currentSession.slots || []
       ).join("   ,   ")}</span></li>`;
+      data += `<li><span>Age limi</span>&nbsp;<span>${currentSession.min_age_limit}</span></li>`;
       if (i === sessions.length - 1) {
         data += "</li></ul>";
       }
