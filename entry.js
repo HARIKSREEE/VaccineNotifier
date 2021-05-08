@@ -4,9 +4,13 @@ const configHelper = require("./helpers/config.helper");
 
 (async () => {
   console.log("config", configHelper);
-  await dataHelper.checkAvalability();
-  setInterval(async () => {
+  try {
     await dataHelper.checkAvalability();
-  }, 900000);
+    setInterval(async () => {
+      await dataHelper.checkAvalability();
+    }, 900000);
+  } catch (ex) {
+    console.log("error", ex);
+  }
   //await dataHelper.checkAvalability();
 })();
