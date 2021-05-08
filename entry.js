@@ -11,8 +11,9 @@ const mailHelper = require("./helpers/send-grid.helper");
   const result = dotenv.config();
 
   console.log(process.env.SEND_GRID_API_KEY);
-  // setInterval(async () => {
-  //   await dataHelper.checkAvalability();
-  // }, 1000);
   await dataHelper.checkAvalability();
+  setInterval(async () => {
+    await dataHelper.checkAvalability();
+  }, 900000);
+  //await dataHelper.checkAvalability();
 })();
