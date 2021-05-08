@@ -94,12 +94,9 @@ const getDistrictUrl = (id, date) => {
 };
 
 const DataHelper = {
-  getAvailabilityByDistrict: async (
-    id = process.env.STATE_ID,
-    date = process.env.DATE_CONFIG
-  ) => {
-    id == id ?? configHelper.stateId;
-    date = date ?? configHelper.date;
+  getAvailabilityByDistrict: async (id = undefined, date = undefined) => {
+    id = id ? id : configHelper.districtId;
+    date = date ? date : configHelper.date;
     const url = getDistrictUrl(id, date);
     const updatedConfig = config;
     config.headers.host = configHelper.endpointHost;

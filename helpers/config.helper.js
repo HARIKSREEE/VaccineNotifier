@@ -5,6 +5,6 @@ module.exports = {
   sendGridKey: process.env.SENDGRID_API_KEY,
   endpointHost: process.env.HOST_CONFIG,
   runtime: process.env.RUN_TIME,
-  stateId: process.env.STATE_ID,
+  districtId: process.env.DISTRICT_ID,
   date: process.env.DATE_CONFIG
 };
