@@ -6,7 +6,7 @@ const util = require("./helpers/util");
 (async () => {
   let hasOverrideHappened = false;
   try {
-    await dataHelper.checkAvalability();
+   await dataHelper.checkAvalability();
 
     console.log("Initial call happened");
     console.log("Vaccine checker running...");
@@ -24,7 +24,7 @@ const util = require("./helpers/util");
       const currentShortTime = util.getCurrentTimeShort();
       const currentTimeHour = +currentShortTime.slice(0, 2);
       const currentTimeMin = +currentShortTime.slice(3, 5);
-      const currentTimeType = +currentShortTime.slice(9); // AM/PM
+      const currentTimeType = currentShortTime.slice(9); // AM/PM
       const currentTimeSecInms = +currentShortTime.slice(6, 8) * 1000;
 
       const plusMargin = 5000;
@@ -34,7 +34,7 @@ const util = require("./helpers/util");
         !hasOverrideHappened &&
         overRideHour === currentTimeHour &&
         overRideMin === currentTimeMin &&
-        overRideType === currentTimeType &&
+        overRideType == currentTimeType &&
         (currentTimeSecInms <= plusMargin ||
           currentTimeSecInms >= negativeMargin)
       ) {

@@ -141,7 +141,12 @@ const DataHelper = {
         undefined,
         activeDate
       );
-      const activeCentersForDate = DataHelper.findAvailableCenters(data);
+      center_id;
+      let activeCentersForDate = DataHelper.findAvailableCenters(data);
+      const foundCenters = availableCenters.map((center) => center.center_id);
+      activeCentersForDate = activeCentersForDate.filter((center) => {
+        return !foundCenters.includes(center.center_id);
+      });
       if (activeCentersForDate.length > 0) {
         availableCenters = availableCenters.concat(activeCentersForDate);
       }
