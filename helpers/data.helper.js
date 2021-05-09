@@ -10,6 +10,10 @@ const Util = require("./util");
 
 const persistanceHelper = require("./persistance.helper");
 
+const telegramDataHelper = require("./mark-down.helper");
+
+const teleGramHelper = require("./telegram.helper");
+
 const emailSentTimeout = 1800000;
 
 const sampleResponse = {
@@ -81,7 +85,12 @@ const sampleResponse = {
           date: "08-05-2021", // date,
           min_age_limit: 18,
           vaccine: "Covishield", //covishield/ covaxin
-          slots: ["09:00AM-11:00AM", "09:00AM-11:00AM"],
+          slots: [
+            "09:00AM-11:00AM",
+            "09:00AM-11:00AM",
+            "09:00AM-11:00AM",
+            "09:00AM-11:00AM",
+          ],
         },
       ],
     },
@@ -179,6 +188,7 @@ const DataHelper = {
   },
   notifyAboutAvailableCenters: async (centers = []) => {
     const notificationData = [];
+    const telNotificationData = [];
     for (let i = 0; i < centers.length; i++) {
       const availableSessions = (centers[i].sessions || []).filter(
         (session) => session.available_capacity > 0
@@ -187,11 +197,18 @@ const DataHelper = {
         centers[i],
         availableSessions
       );
+      const telData = telegramDataHelper.generateLocationData(
+        centers[i],
+        availableSessions
+      );
       notificationData.push(htmlData);
+      telNotificationData.push(telData);
     }
     if (notificationData.length > 0) {
       const combinedHtml = `<div>${notificationData.join("")}</div>`;
 
+      const telCombiledData = `${telNotificationData.join("")}`;
+      await teleGramHelper.sendTelegramMessage(telCombiledData);
       await sendGridHelper.sendMessage("Vaccine Available", combinedHtml);
     }
   },

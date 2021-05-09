@@ -8,5 +8,7 @@ module.exports = {
   districtId: process.env.DISTRICT_ID,
   date: process.env.DATE_CONFIG,
   dateSpan: process.env.DATE_SPAN,
-  timeOverRide: process.env.TIME_OVERRIDE
+  timeOverRide: process.env.TIME_OVERRIDE,
+  telegramKey: process.env.TELEGRAM_TOKEN,
+  telegramChatId: process.env.TELEGRAM_CHAT_ID
 };

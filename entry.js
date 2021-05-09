@@ -5,6 +5,8 @@ const utilHelper = require("./helpers/util");
 
 const persistanceHelper = require("./helpers/persistance.helper");
 
+const TelegramHelper = require("./helpers/telegram.helper");
+
 const retryTimeout = 120000;
 
 const overridePollTimeout = 5000;
@@ -59,6 +61,7 @@ const timeOverrideChecker = async () => {
 
 (async () => {
   try {
+    TelegramHelper.initializeBot();
     console.log("Initialized");
     await startChecking();
   } catch (ex) {
