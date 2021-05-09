@@ -6,5 +6,7 @@ module.exports = {
   endpointHost: process.env.HOST_CONFIG,
   runtime: process.env.RUN_TIME,
   districtId: process.env.DISTRICT_ID,
-  date: process.env.DATE_CONFIG
+  date: process.env.DATE_CONFIG,
+  dateSpan: process.env.DATE_SPAN,
+  timeOverRide: process.env.TIME_OVERRIDE
 };

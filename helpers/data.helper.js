@@ -4,6 +4,10 @@ const sendGridHelper = require("./send-grid.helper");
 
 const configHelper = require("./config.helper");
 
+const HtmlHelper = require("./html.helper");
+
+const Util = require("./util");
+
 const sampleResponse = {
   centers: [
     {
@@ -127,8 +131,23 @@ const DataHelper = {
     return availableCenters;
   },
   checkAvalability: async () => {
-    const data = await DataHelper.getAvailabilityByDistrict();
-    const availableCenters = DataHelper.findAvailableCenters(data);
+    const dates = Util.getDateSpan(configHelper.dateSpan);
+    let availableCenters = [];
+
+    for (let i = 0; i < dates.length; i++) {
+      const activeDate = dates[i];
+      console.log("caling date", activeDate);
+      const data = await DataHelper.getAvailabilityByDistrict(
+        undefined,
+        activeDate
+      );
+      const activeCentersForDate = DataHelper.findAvailableCenters(data);
+      if (activeCentersForDate.length > 0) {
+        availableCenters = availableCenters.concat(activeCentersForDate);
+      }
+    }
+
+    console.log("iteracted through dates");
 
     if (availableCenters.length > 0) {
       DataHelper.notifyAboutAvailableCenters(availableCenters);
@@ -140,7 +159,7 @@ const DataHelper = {
       const availableSessions = (centers[i].sessions || []).filter(
         (session) => session.available_capacity > 0
       );
-      const htmlData = DataHelper.generateLocationData(
+      const htmlData = HtmlHelper.generateLocationData(
         centers[i],
         availableSessions
       );
@@ -151,38 +170,6 @@ const DataHelper = {
 
       await sendGridHelper.sendMessage("Vaccine Available", combinedHtml);
     }
-  },
-  generateLocationData: (center, sessions = []) => {
-    const addressData = `<ul>
-      <li><span>District</span>&nbsp;<span>${center.district_name}</span></li>
-      <li><span>Address</span>&nbsp;<span>${center.address}</span></li>
-      <li><span>Center name</span>&nbsp;<span>${center.name}</span></li>
-      <li><span>Pincode</span>&nbsp;<span>${center.pincode}</span></li>
-      <li><span>Time from</span>&nbsp;<span>${center.from}</span></li>
-      <li><span>Time to</span>&nbsp;<span>${center.to}</span></li>
-    </ul>`;
-    const sessionData = DataHelper.getSessionData(sessions);
-    return `<div>${addressData + sessionData}</div>`;
-  },
-  getSessionData: (sessions = []) => {
-    let data = "";
-    if (sessions.length > 0) {
-      data += "<li><ul>";
-    }
-    for (let i = 0; i < sessions.length; i++) {
-      const currentSession = sessions[i];
-      data += `<li><span>Availability</span>&nbsp;<span>${currentSession.available_capacity}</span></li>`;
-      data += `<li><span>Date</span>&nbsp;<span>${currentSession.date}</span></li>`;
-      data += `<li><span>Vaccine</span>&nbsp;<span>${currentSession.vaccine}</span></li>`;
-      data += `<li><span>Slots</span>&nbsp;<span>${(
-        currentSession.slots || []
-      ).join("   ,   ")}</span></li>`;
-      data += `<li><span>Age limi</span>&nbsp;<span>${currentSession.min_age_limit}</span></li>`;
-      if (i === sessions.length - 1) {
-        data += "</li></ul>";
-      }
-    }
-    return data;
   },
 };
 
