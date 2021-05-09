@@ -141,7 +141,6 @@ const DataHelper = {
         undefined,
         activeDate
       );
-      center_id;
       let activeCentersForDate = DataHelper.findAvailableCenters(data);
       const foundCenters = availableCenters.map((center) => center.center_id);
       activeCentersForDate = activeCentersForDate.filter((center) => {
