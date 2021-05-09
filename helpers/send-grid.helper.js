@@ -32,7 +32,15 @@ const SendGrid = {
     updatedMessage.to = process.env.EMAIL_TO;
     return updatedMessage;
   },
-  setKey: () => {},
+  sendErrorNotification: async (message) => {
+    try {
+      const config = SendGrid.getMessage(message, "<span>Error occured</span>");
+      const result = await sgMail.send(config);
+      console.log("Error notification sent");
+    } catch (ex) {
+      console.log("failed to send error mail", ex);
+    }
+  },
 };
 
 module.exports = SendGrid;

@@ -8,6 +8,10 @@ const HtmlHelper = require("./html.helper");
 
 const Util = require("./util");
 
+const persistanceHelper = require("./persistance.helper");
+
+const emailSentTimeout = 1800000;
+
 const sampleResponse = {
   centers: [
     {
@@ -130,31 +134,47 @@ const DataHelper = {
 
     return availableCenters;
   },
-  checkAvalability: async () => {
-    const dates = Util.getDateSpan(configHelper.dateSpan);
-    let availableCenters = [];
+  checkAvalability: async (callback) => {
+    try {
+      const dates = Util.getDateSpan(configHelper.dateSpan);
+      let availableCenters = [];
 
-    for (let i = 0; i < dates.length; i++) {
-      const activeDate = dates[i];
-      console.log("caling date", activeDate);
-      const data = await DataHelper.getAvailabilityByDistrict(
-        undefined,
-        activeDate
-      );
-      let activeCentersForDate = DataHelper.findAvailableCenters(data);
-      const foundCenters = availableCenters.map((center) => center.center_id);
-      activeCentersForDate = activeCentersForDate.filter((center) => {
-        return !foundCenters.includes(center.center_id);
-      });
-      if (activeCentersForDate.length > 0) {
-        availableCenters = availableCenters.concat(activeCentersForDate);
+      for (let i = 0; i < dates.length; i++) {
+        const activeDate = dates[i];
+        console.log("calling date", activeDate);
+        const data = await DataHelper.getAvailabilityByDistrict(
+          undefined,
+          activeDate
+        );
+
+        persistanceHelper.setLastErrorOccured(0);
+        persistanceHelper.setHasErrorOccured(false);
+        let activeCentersForDate = DataHelper.findAvailableCenters(data);
+        const foundCenters = availableCenters.map((center) => center.center_id);
+        activeCentersForDate = activeCentersForDate.filter((center) => {
+          return !foundCenters.includes(center.center_id);
+        });
+        if (activeCentersForDate.length > 0) {
+          availableCenters = availableCenters.concat(activeCentersForDate);
+        }
       }
-    }
 
-    console.log("iteracted through dates");
+      console.log("iteracted through dates");
 
-    if (availableCenters.length > 0) {
-      DataHelper.notifyAboutAvailableCenters(availableCenters);
+      if (availableCenters.length > 0) {
+        DataHelper.notifyAboutAvailableCenters(availableCenters);
+      }
+    } catch (ex) {
+      console.log("error occured");
+
+      const lastErrorOccured = persistanceHelper.getLastErrorOccured();
+      const currentTime = new Date().getTime();
+      if (currentTime - lastErrorOccured >= emailSentTimeout) {
+        sendGridHelper.sendErrorNotification("Error occured during data fetch");
+        persistanceHelper.setLastErrorOccured(new Date().getTime());
+      }
+      persistanceHelper.setHasErrorOccured(true);
+      callback(true);
     }
   },
   notifyAboutAvailableCenters: async (centers = []) => {

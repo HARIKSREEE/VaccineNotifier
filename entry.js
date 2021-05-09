@@ -1,48 +1,66 @@
 const configHelper = require("./helpers/config.helper");
 const dataHelper = require("./helpers/data.helper");
 
-const util = require("./helpers/util");
+const utilHelper = require("./helpers/util");
+
+const persistanceHelper = require("./helpers/persistance.helper");
+
+const retryTimeout = 120000;
+
+const overridePollTimeout = 5000;
+
+const mainPollingTimeout = 900000;
+
+let hasOverrideHappened = false;
+
+const restartFromError = async () => {
+  persistanceHelper.clearLastRestartTimeout();
+  const timeOut = setTimeout(async () => {
+    console.log("restarting after error");
+    await startChecking(true);
+  }, retryTimeout);
+  persistanceHelper.setLastRestartTimeout(timeOut);
+};
+
+const startChecking = async (isFromError) => {
+  await dataHelper.checkAvalability(restartFromError);
+  console.log("Api call done");
+  console.log("Vaccine checker running...");
+
+  if (isFromError) {
+    persistanceHelper.clearLastScheduler();
+  }
+
+  const interval = setInterval(async () => {
+    await dataHelper.checkAvalability(restartFromError);
+    exceptionTimeDelay = 0;
+    console.log("Polling done");
+  }, mainPollingTimeout);
+
+  persistanceHelper.setLastScheduler(interval);
+
+  if (!isFromError) {
+    timeOverrideChecker();
+  }
+};
+
+const timeOverrideChecker = async () => {
+  console.log("Over ride time checker running...");
+  setInterval(async () => {
+    console.log("Override polling");
+
+    if (!hasOverrideHappened && utilHelper.checkIfOverrideNeeded()) {
+      hasOverrideHappened = true;
+      console.log("Overide call happened");
+      await dataHelper.checkAvalability(restartFromError);
+    }
+  }, overridePollTimeout);
+};
 
 (async () => {
-  let hasOverrideHappened = false;
   try {
-   await dataHelper.checkAvalability();
-
-    console.log("Initial call happened");
-    console.log("Vaccine checker running...");
-    setInterval(async () => {
-      await dataHelper.checkAvalability();
-      console.log("Called Api");
-    }, 900000);
-
-    setInterval(async () => {
-      const overRideTime = configHelper.timeOverRide;
-      const overRideHour = +overRideTime.slice(0, 2);
-      const overRideMin = +overRideTime.slice(3, 5);
-      const overRideType = overRideTime.slice(9); // AM/PM
-
-      const currentShortTime = util.getCurrentTimeShort();
-      const currentTimeHour = +currentShortTime.slice(0, 2);
-      const currentTimeMin = +currentShortTime.slice(3, 5);
-      const currentTimeType = currentShortTime.slice(9); // AM/PM
-      const currentTimeSecInms = +currentShortTime.slice(6, 8) * 1000;
-
-      const plusMargin = 5000;
-      const negativeMargin = 55 * 1000;
-
-      if (
-        !hasOverrideHappened &&
-        overRideHour === currentTimeHour &&
-        overRideMin === currentTimeMin &&
-        overRideType == currentTimeType &&
-        (currentTimeSecInms <= plusMargin ||
-          currentTimeSecInms >= negativeMargin)
-      ) {
-        hasOverrideHappened = true;
-        console.log("Overide call happened");
-        await dataHelper.checkAvalability();
-      }
-    }, 5000);
+    console.log("Initialized");
+    await startChecking();
   } catch (ex) {
     console.log("error", ex);
   }
