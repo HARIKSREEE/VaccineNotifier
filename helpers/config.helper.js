@@ -10,5 +10,6 @@ module.exports = {
   dateSpan: process.env.DATE_SPAN,
   timeOverRide: process.env.TIME_OVERRIDE,
   telegramKey: process.env.TELEGRAM_TOKEN,
-  telegramChatId: process.env.TELEGRAM_CHAT_ID
+  telegramChatId: process.env.TELEGRAM_CHAT_ID,
+  botName: process.env.BOT_NAME
 };

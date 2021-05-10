@@ -3,10 +3,10 @@ const PersistanceHelper = {
   lastRestartTimeout: "",
   lastErrorOccured: 0,
   lastScheduler: "",
-  setHasErrorOccured: (value) => {
+  setHasErrorOccurred: (value) => {
     PersistanceHelper.hasErrorOccured = value;
   },
-  setLastErrorOccured: (value) => {
+  setLastErrorOccurred: (value) => {
     PersistanceHelper.lastErrorOccured = value;
   },
   getHasErrorOccured: () => PersistanceHelper.lastErrorOccured,

@@ -1,4 +1,3 @@
-const configHelper = require("./helpers/config.helper");
 const dataHelper = require("./helpers/data.helper");
 
 const utilHelper = require("./helpers/util");
@@ -25,7 +24,7 @@ const restartFromError = async () => {
 };
 
 const startChecking = async (isFromError) => {
-  await dataHelper.checkAvalability(restartFromError);
+  await dataHelper.checkAvailability(restartFromError);
   console.log("Api call done");
   console.log("Vaccine checker running...");
 
@@ -34,9 +33,9 @@ const startChecking = async (isFromError) => {
   }
 
   const interval = setInterval(async () => {
-    await dataHelper.checkAvalability(restartFromError);
+    await dataHelper.checkAvailability(restartFromError);
     exceptionTimeDelay = 0;
-    console.log("Polling done");
+    console.log("Polling done: ", new Date().toLocaleTimeString());
   }, mainPollingTimeout);
 
   persistanceHelper.setLastScheduler(interval);
@@ -49,12 +48,12 @@ const startChecking = async (isFromError) => {
 const timeOverrideChecker = async () => {
   console.log("Over ride time checker running...");
   setInterval(async () => {
-    console.log("Override polling");
+    console.log("Override polling: ", new Date().toLocaleTimeString());
 
     if (!hasOverrideHappened && utilHelper.checkIfOverrideNeeded()) {
       hasOverrideHappened = true;
-      console.log("Overide call happened");
-      await dataHelper.checkAvalability(restartFromError);
+      console.log("Override call happened");
+      await dataHelper.checkAvailability(restartFromError);
     }
   }, overridePollTimeout);
 };

@@ -19,7 +19,7 @@ const emailSentTimeout = 1800000;
 const sampleResponse = {
   centers: [
     {
-      district_name: "Thiruvananthapuram", //district name
+      district_name: "Dummy - Thiruvananthapuram", //district name
       block_name: "", //block name
       address: "MCh", //place name
       from: "9:00Am", //time,
@@ -36,7 +36,7 @@ const sampleResponse = {
       ],
     },
     {
-      district_name: "Thiruvananthapuram", //district name
+      district_name: "Dummy - Thiruvananthapuram", //district name
       block_name: "", //block name
       address: "MCh", //place name
       from: "9:00Am", //time,
@@ -54,7 +54,7 @@ const sampleResponse = {
       ],
     },
     {
-      district_name: "Thiruvananthapuram", //district name
+      district_name: "Dummy - Thiruvananthapuram", //district name
       block_name: "", //block name
       address: "MCh", //place name
       from: "9:00Am", //time,
@@ -72,7 +72,7 @@ const sampleResponse = {
       ],
     },
     {
-      district_name: "Thiruvananthapuram", //district name
+      district_name: "Dummy - Thiruvananthapuram", //district name
       block_name: "", //block name
       address: "MCh", //place name
       from: "9:00Am", //time,
@@ -143,7 +143,7 @@ const DataHelper = {
 
     return availableCenters;
   },
-  checkAvalability: async (callback) => {
+  checkAvailability: async (callback) => {
     try {
       const dates = Util.getDateSpan(configHelper.dateSpan);
       let availableCenters = [];
@@ -156,8 +156,8 @@ const DataHelper = {
           activeDate
         );
 
-        persistanceHelper.setLastErrorOccured(0);
-        persistanceHelper.setHasErrorOccured(false);
+        persistanceHelper.setLastErrorOccurred(0);
+        persistanceHelper.setHasErrorOccurred(false);
         let activeCentersForDate = DataHelper.findAvailableCenters(data);
         const foundCenters = availableCenters.map((center) => center.center_id);
         activeCentersForDate = activeCentersForDate.filter((center) => {
@@ -168,21 +168,24 @@ const DataHelper = {
         }
       }
 
-      console.log("iteracted through dates");
+      console.log("Iterated through dates");
 
       if (availableCenters.length > 0) {
+        console.log("Found vaccine centers with availability");
         DataHelper.notifyAboutAvailableCenters(availableCenters);
       }
     } catch (ex) {
-      console.log("error occured");
+      console.log("error occurred");
 
-      const lastErrorOccured = persistanceHelper.getLastErrorOccured();
+      const lastErrorOccurred = persistanceHelper.getLastErrorOccured();
       const currentTime = new Date().getTime();
-      if (currentTime - lastErrorOccured >= emailSentTimeout) {
-        sendGridHelper.sendErrorNotification("Error occured during data fetch");
-        persistanceHelper.setLastErrorOccured(new Date().getTime());
+      if (currentTime - lastErrorOccurred >= emailSentTimeout) {
+        sendGridHelper.sendErrorNotification(
+          "Error occurred during data fetch"
+        );
+        persistanceHelper.setLastErrorOccurred(new Date().getTime());
       }
-      persistanceHelper.setHasErrorOccured(true);
+      persistanceHelper.setHasErrorOccurred(true);
       callback(true);
     }
   },
@@ -207,9 +210,10 @@ const DataHelper = {
     if (notificationData.length > 0) {
       const combinedHtml = `<div>${notificationData.join("")}</div>`;
 
-      const telCombiledData = `${telNotificationData.join("")}`;
-      await teleGramHelper.sendTelegramMessage(telCombiledData);
-      await sendGridHelper.sendMessage("Vaccine Available", combinedHtml);
+      const teleCombinedData = `${telNotificationData.join("")}`;
+      await teleGramHelper.sendTelegramMessage(teleCombinedData);
+      // Disabling the email feature since telegram is more convenient
+      //await sendGridHelper.sendMessage("Vaccine Available", combinedHtml);
     }
   },
 };
