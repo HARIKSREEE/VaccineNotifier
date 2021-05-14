@@ -10,7 +10,7 @@ const retryTimeout = 120000;
 
 const overridePollTimeout = 5000;
 
-const mainPollingTimeout = 900000;
+const mainPollingTimeout = 300000;
 
 let hasOverrideHappened = false;
 
