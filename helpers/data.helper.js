@@ -92,6 +92,18 @@ const sampleResponse = {
             "09:00AM-11:00AM",
           ],
         },
+        {
+          available_capacity: 8,
+          date: "08-05-2021", // date,
+          min_age_limit: 18,
+          vaccine: "Covishield", //covishield/ covaxin
+          slots: [
+            "09:00AM-11:00AM",
+            "09:00AM-11:00AM",
+            "09:00AM-11:00AM",
+            "09:00AM-11:00AM",
+          ],
+        },
       ],
     },
   ],
@@ -126,7 +138,7 @@ const DataHelper = {
       return;
     }
     const availableCenters = [];
-    const centerData = data.data?.centers || [];
+    const centerData = sampleResponse.centers || data.data?.centers || [];
     const centerCount = centerData?.length;
     for (let i = 0; i < centerCount; i++) {
       const currentCenter = centerData[i];
@@ -208,10 +220,10 @@ const DataHelper = {
       telNotificationData.push(telData);
     }
     if (notificationData.length > 0) {
-      const combinedHtml = `<div>${notificationData.join("")}</div>`;
+      //const combinedHtml = `<div>${notificationData.join("")}</div>`;
 
-      const teleCombinedData = `${telNotificationData.join("")}`;
-      await teleGramHelper.sendTelegramMessage(teleCombinedData);
+      //const teleCombinedData = `${telNotificationData.join("")}`;
+     // await teleGramHelper.sendMultipleTelegramMessage(telNotificationData);
       // Disabling the email feature since telegram is more convenient
       //await sendGridHelper.sendMessage("Vaccine Available", combinedHtml);
     }

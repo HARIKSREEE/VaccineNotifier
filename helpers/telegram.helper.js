@@ -8,7 +8,7 @@ const TelegramHelper = {
     TelegramHelper.bot = new TelegramBot(configHelper.telegramKey, {
       polling: true,
     });
-    TelegramHelper.bot.on("text", (message) => {
+    TelegramHelper.bot.on("channel_post", (message) => {
       const isUnTrackedMessage =
         (message.text || "").split(configHelper.botName)[0].trim() !==
         "/heartbeat";
@@ -24,9 +24,19 @@ const TelegramHelper = {
   },
   sendTelegramMessage: async (message) => {
     console.log("Telegram notification sent");
-    TelegramHelper.bot.sendMessage(configHelper.telegramChatId, message, {
-      parse_mode: "HTML",
-    });
+    await TelegramHelper.bot.sendMessage(
+      configHelper.telegramTestChannel,
+      message,
+      {
+        parse_mode: "HTML",
+      }
+    );
+  },
+  sendMultipleTelegramMessage: async (messages = []) => {
+    console.log("Multiple Telegram notification sent");
+    for (let i = 0; i < messages.length; i++) {
+      await TelegramHelper.sendTelegramMessage(messages[i]);
+    }
   },
 };
 
