@@ -148,7 +148,7 @@ const DataHelper = {
       return;
     }
     const availableCenters = [];
-    const centerData = sampleResponse.centers || data.data?.centers || [];
+    const centerData =  data.data?.centers || [];
     const centerCount = centerData?.length;
     for (let i = 0; i < centerCount; i++) {
       const currentCenter = centerData[i];
