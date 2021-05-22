@@ -148,14 +148,14 @@ const DataHelper = {
       return;
     }
     const availableCenters = [];
-    const centerData =  data.data?.centers || [];
+    const centerData = data.data?.centers || [];
     const centerCount = centerData?.length;
     for (let i = 0; i < centerCount; i++) {
       const currentCenter = centerData[i];
       const centerSessions = currentCenter.sessions || [];
       const hasAvailability = centerSessions.some(
         (session) =>
-          session.available_capacity > 0 &&
+          session.available_capacity > configHelper.minAvailability &&
           +session.min_age_limit >= process.env.MIN_AGE
       );
       if (hasAvailability) {
@@ -216,7 +216,7 @@ const DataHelper = {
     const telNotificationData = [];
     for (let i = 0; i < centers.length; i++) {
       const availableSessions = (centers[i].sessions || []).filter(
-        (session) => session.available_capacity > 0
+        (session) => session.available_capacity > configHelper.minAvailability
       );
       const htmlData = HtmlHelper.generateLocationData(
         centers[i],

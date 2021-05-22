@@ -12,5 +12,6 @@ module.exports = {
   telegramKey: process.env.TELEGRAM_TOKEN,
   telegramChatId: process.env.TELEGRAM_CHAT_ID,
   telegramTestChannel: process.env.TEST_CHANNEL,
-  botName: process.env.BOT_NAME
+  botName: process.env.BOT_NAME,
+  minAvailability: Number(process.env.MIN_AVAILABILITY)
 };
