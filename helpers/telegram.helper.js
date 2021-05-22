@@ -25,7 +25,7 @@ const TelegramHelper = {
   sendTelegramMessage: async (message) => {
     console.log("Telegram notification sent");
     await TelegramHelper.bot.sendMessage(
-      configHelper.telegramTestChannel,
+      configHelper.telegramChatId,
       message,
       {
         parse_mode: "HTML",
