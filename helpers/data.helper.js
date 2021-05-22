@@ -28,6 +28,8 @@ const sampleResponse = {
       sessions: [
         {
           available_capacity: 10,
+          available_capacity_dose1: 3,
+          available_capacity_dose2: 7,
           date: "08-05-2021", // date,
           min_age_limit: 45,
           vaccine: "Covishield", //covishield/ covaxin
@@ -46,6 +48,8 @@ const sampleResponse = {
       sessions: [
         {
           available_capacity: 4,
+          available_capacity_dose1: 4,
+          available_capacity_dose2: 0,
           date: "08-05-2021", // date,
           min_age_limit: 45,
           vaccine: "Covishield", //covishield/ covaxin
@@ -64,6 +68,8 @@ const sampleResponse = {
       sessions: [
         {
           available_capacity: 0,
+          available_capacity_dose1: 0,
+          available_capacity_dose2: 0,
           date: "08-05-2021", // date,
           min_age_limit: 18,
           vaccine: "Covishield", //covishield/ covaxin
@@ -82,6 +88,8 @@ const sampleResponse = {
       sessions: [
         {
           available_capacity: 8,
+          available_capacity_dose1: 4,
+          available_capacity_dose2: 4,
           date: "08-05-2021", // date,
           min_age_limit: 18,
           vaccine: "Covishield", //covishield/ covaxin
@@ -94,6 +102,8 @@ const sampleResponse = {
         },
         {
           available_capacity: 8,
+          available_capacity_dose1: 1,
+          available_capacity_dose2: 7,
           date: "08-05-2021", // date,
           min_age_limit: 18,
           vaccine: "Covishield", //covishield/ covaxin
@@ -221,9 +231,8 @@ const DataHelper = {
     }
     if (notificationData.length > 0) {
       //const combinedHtml = `<div>${notificationData.join("")}</div>`;
-
       //const teleCombinedData = `${telNotificationData.join("")}`;
-     // await teleGramHelper.sendMultipleTelegramMessage(telNotificationData);
+      await teleGramHelper.sendMultipleTelegramMessage(telNotificationData);
       // Disabling the email feature since telegram is more convenient
       //await sendGridHelper.sendMessage("Vaccine Available", combinedHtml);
     }
