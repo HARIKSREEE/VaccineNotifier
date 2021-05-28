@@ -36,6 +36,7 @@ const sampleResponse = {
           slots: ["09:00AM-11:00AM", "09:00AM-11:00AM"],
         },
       ],
+      vaccine_fees: [{vaccine: "COVISHIELD", fee: "950"},{vaccine: "COVAXIN", fee: "950"}]
     },
     {
       district_name: "Dummy - Thiruvananthapuram", //district name
@@ -56,6 +57,7 @@ const sampleResponse = {
           slots: ["09:00AM-11:00AM", "09:00AM-11:00AM"],
         },
       ],
+      vaccine_fees: [{vaccine: "COVISHIELD", fee: "600"},{vaccine: "COVAXIN", fee: "200"}]
     },
     {
       district_name: "Dummy - Thiruvananthapuram", //district name
@@ -76,6 +78,7 @@ const sampleResponse = {
           slots: ["09:00AM-11:00AM", "09:00AM-11:00AM"],
         },
       ],
+      vaccine_fees: [{vaccine: "COVISHIELD", fee: "300"},{vaccine: "COVAXIN", fee: "100"}]
     },
     {
       district_name: "Dummy - Thiruvananthapuram", //district name
