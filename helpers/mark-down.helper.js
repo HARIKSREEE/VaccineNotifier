@@ -17,12 +17,13 @@ Register here \u2935
       data += `     <b>Availability : </b><b>${
         currentSession.available_capacity
       }</b>
-      (First dose: <b>${
+      Dose 1: <b>${
         currentSession.available_capacity_dose1
-      }</b>, Second dose: <b>${currentSession.available_capacity_dose2}</b>)\n
+      }</b>
+      Dose 2: <b>${currentSession.available_capacity_dose2}</b>\n
        Date : ${currentSession.date}\n
        <b>Vaccine : </b><b>${currentSession.vaccine}</b>\n
-       <b>Age : </b><b>${currentSession.min_age_limit}+</b>${
+       <b>Age : </b><b>${getAgeInfo(currentSession.min_age_limit)}</b>${
         sessions.length > 1 && i !== sessions.length - 1
           ? "\n\n++++++++++++++++++++++++++++++++++\n\n"
           : ""
@@ -38,6 +39,14 @@ Register here \u2935
 
     return slotData;
   },
+};
+
+const getAgeInfo = (value) => {
+ return Number(value) === 45
+    ? "45+"
+    : Number(value) === 18
+    ? "18 to 44"
+    : "Not available";
 };
 
 module.exports = TelegramDataHelper;
