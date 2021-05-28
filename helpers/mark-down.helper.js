@@ -22,7 +22,7 @@ Register here \u2935
       }</b>, Second dose: <b>${currentSession.available_capacity_dose2}</b>)\n
        Date : ${currentSession.date}\n
        <b>Vaccine : </b><b>${currentSession.vaccine}</b>\n
-       <b>Age limit : </b><b>${currentSession.min_age_limit}</b>${
+       <b>Age : </b><b>${currentSession.min_age_limit}+</b>${
         sessions.length > 1 && i !== sessions.length - 1
           ? "\n\n++++++++++++++++++++++++++++++++++\n\n"
           : ""
